@@ -4,8 +4,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-typedef struct Nodo {
-	size_t anterior;
+typedef struct NodoBC {
+	struct NodoBC* anterior;
 	size_t id;
 	size_t long_mensaje;
 	char* mensaje;

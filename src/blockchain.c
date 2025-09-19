@@ -19,3 +19,12 @@ void nodobc_destruir(NodoBC* nodo) {
 	// free(nodo->mensaje);
 	free(nodo);
 };
+
+// Merkle* merkle_crear(size_t cant_nodos, NodoBC* nodos) {
+// 	Merkle* arbol = malloc(sizeof(Merkle));
+// 	arbol->heap = heap_new(sizeof(unsigned long long), comparar_longlongs, GT);
+// 	arbol->primos = primos((int)arbol->heap->capacity);
+// 	arbol->nodos = nodos;
+// 	arbol->cantidad_nodos = cant_nodos;
+// 	return arbol;
+// };

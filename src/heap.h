@@ -12,11 +12,11 @@
 #define HEAP_MINIMUM_CAPACITY 8
 #endif //HEAP_MINIMUM_CAPACITY
 
-enum Ordering: uint8_t {
+typedef enum Ordering: uint8_t {
 	LT = -1,
 	EQ = 0,
 	GT = 1
-};
+} Ordering;
 
 typedef enum Ordering(*Comparison)(const uint8_t* lhs, const uint8_t* rhs);
 
