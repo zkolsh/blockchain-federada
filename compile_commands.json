@@ -1,0 +1,32 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-c",
+      "-o",
+      "build/generador_primos.o",
+      "src/generador_primos.c"
+    ],
+    "directory": "/home/rain/workspace/escuela/tprog/blockchain",
+    "file": "/home/rain/workspace/escuela/tprog/blockchain/src/generador_primos.c",
+    "output": "/home/rain/workspace/escuela/tprog/blockchain/build/generador_primos.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-c",
+      "-o",
+      "build/main.o",
+      "src/main.c"
+    ],
+    "directory": "/home/rain/workspace/escuela/tprog/blockchain",
+    "file": "/home/rain/workspace/escuela/tprog/blockchain/src/main.c",
+    "output": "/home/rain/workspace/escuela/tprog/blockchain/build/main.o"
+  }
+]

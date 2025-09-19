@@ -1,9 +1,10 @@
 CC := clang
 CFLAGS := -Wall -Wextra -g
-LDFLAGS := 
+LDFLAGS := -lm
 
 BIN := blockchain
 BUILD_DIR := build
+SRC_DIR := src
 
 SRCS := $(wildcard $(SRC_DIR)/*.c)
 OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
@@ -14,10 +15,10 @@ DEPS := $(OBJS:.o=.d)
 all: $(BIN)
 
 $(BIN): $(OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
 
 $(BUILD_DIR):
 	mkdir -p $@
