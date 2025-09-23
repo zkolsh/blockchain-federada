@@ -1,30 +1,36 @@
 #ifndef MERKLE_H
 #define MERKLE_H
 
+#include <stdbool.h>
 #ifndef MERKLE_CAPACIDAD_MINIMA
 #define MERKLE_CAPACIDAD_MINIMA 16
 #endif //MERKLE_CAPACIDAD_MINIMA
 
 #include "generador_primos.h"
+#include "blockchain.h"
 
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
-
-typedef struct NodoBC NodoBC;
 
 typedef struct Merkle {
 	size_t capacidad;
 	size_t tamaño;
 	unsigned long long* datos;
+	size_t longitud_primos;
+	size_t indice_primos;
 	int* primos;
-	// NodoBC* nodos;
+	size_t cantidad_nodos;
+	Blockchain** nodos;
 } Merkle;
 
-Merkle* merkle_crear(size_t cant_nodos, NodoBC* nodos);
+Merkle* merkle_crear(size_t cant_nodos, Blockchain** nodos);
 void merkle_destruir(Merkle* arbol);
-void merkle_alta(Merkle* arbol, NodoBC* nodo);
-void merkle_actualizar(Merkle* arbol, size_t id, size_t long_mensaje, char* mensaje);
-void merkle_validar(Merkle* arbol);
-void merkle_validar_subconjunto(Merkle* arbol, size_t a, size_t b);
+void merkle_realloc(Merkle* arbol, size_t nueva_capacidad);
+size_t merkle_alta(Merkle* arbol, Blockchain* nodo);
+void merkle_actualizar(Merkle* arbol, size_t id_blockchain, size_t id_nodo, size_t long_mensaje, char* mensaje);
+void merkle_amendar(Merkle* arbol, size_t id_blockchain, size_t id_nodo, size_t long_mensaje, char* mensaje);
+bool merkle_validar(Merkle* arbol);
+bool merkle_validar_subconjunto(Merkle* arbol, size_t producto_esperado, size_t inicio, size_t fin);
 
 #endif //MERKLE_H

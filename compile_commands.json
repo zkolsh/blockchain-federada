@@ -7,6 +7,21 @@
       "-g",
       "-c",
       "-o",
+      "build/blockchain.o",
+      "src/blockchain.c"
+    ],
+    "directory": "/home/rain/workspace/escuela/tprog/blockchain",
+    "file": "/home/rain/workspace/escuela/tprog/blockchain/src/blockchain.c",
+    "output": "/home/rain/workspace/escuela/tprog/blockchain/build/blockchain.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-c",
+      "-o",
       "build/generador_primos.o",
       "src/generador_primos.c"
     ],
@@ -28,5 +43,20 @@
     "directory": "/home/rain/workspace/escuela/tprog/blockchain",
     "file": "/home/rain/workspace/escuela/tprog/blockchain/src/main.c",
     "output": "/home/rain/workspace/escuela/tprog/blockchain/build/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-c",
+      "-o",
+      "build/merkle.o",
+      "src/merkle.c"
+    ],
+    "directory": "/home/rain/workspace/escuela/tprog/blockchain",
+    "file": "/home/rain/workspace/escuela/tprog/blockchain/src/merkle.c",
+    "output": "/home/rain/workspace/escuela/tprog/blockchain/build/merkle.o"
   }
 ]
