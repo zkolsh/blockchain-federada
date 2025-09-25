@@ -18,13 +18,20 @@ void bl_destruir(Blockchain* nodo) {
 	free(nodo);
 };
 
-Blockchain* bl_agregar_inicio(Blockchain* cadena, size_t id, size_t long_mensaje, char* mensaje) {
+Blockchain* bl_agregar_final(Blockchain* cadena, size_t id, size_t long_mensaje, char* mensaje) {
 	if (cadena == NULL) {
 		return bl_crear(id, long_mensaje, mensaje);
 	};
 
+	Blockchain* ultimo = cadena;
+	while (ultimo->siguiente) {
+		ultimo = ultimo->siguiente;
+	};
+
 	Blockchain* n = bl_crear(id, long_mensaje, mensaje);
-	n->siguiente = cadena;
-	cadena->anterior = n;
-	return n;
+	n->siguiente = NULL;
+	n->anterior = ultimo;
+	ultimo->siguiente = n;
+
+	return cadena;
 };

@@ -35,15 +35,15 @@ int main() {
 	Merkle* arbol_deudores = merkle_crear(0, NULL);
 
 	Registro deuda_felipe = registrar_deuda(1, "Felipe Isern", 12341245, 667500);
-	Blockchain* bl_felipe = bl_agregar_inicio(NULL, deuda_felipe.tiempo, deuda_felipe.longitud, deuda_felipe.mensaje);
+	Blockchain* bl_felipe = bl_agregar_final(NULL, deuda_felipe.tiempo, deuda_felipe.longitud, deuda_felipe.mensaje);
 	size_t id_felipe = merkle_alta(arbol_deudores, bl_felipe);
 
 	Registro deuda_mate = registrar_deuda(2, "Mateo Delmagro", 98765432, 120000);
-	Blockchain* bl_mate = bl_agregar_inicio(bl_felipe, deuda_mate.tiempo, deuda_mate.longitud, deuda_mate.mensaje);
+	Blockchain* bl_mate = bl_agregar_final(bl_felipe, deuda_mate.tiempo, deuda_mate.longitud, deuda_mate.mensaje);
 	size_t id_mate = merkle_alta(arbol_deudores, bl_mate);
 
 	Registro deuda_manu = registrar_deuda(3, "Manuel Slepoy", 11223344, 45000);
-	Blockchain* bl_manu = bl_agregar_inicio(bl_mate, deuda_manu.tiempo, deuda_manu.longitud, deuda_manu.mensaje);
+	Blockchain* bl_manu = bl_agregar_final(bl_mate, deuda_manu.tiempo, deuda_manu.longitud, deuda_manu.mensaje);
 	size_t id_manu = merkle_alta(arbol_deudores, bl_manu);
 
 	if (merkle_validar(arbol_deudores)) {
