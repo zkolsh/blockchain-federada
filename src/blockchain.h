@@ -12,7 +12,7 @@ typedef struct Blockchain {
 	char* mensaje;
 } Blockchain;
 
-Blockchain* bl_crear();
+Blockchain* bl_crear(size_t id, size_t long_mensaje, char* mensaje);
 void bl_destruir(Blockchain* nodo);
 Blockchain* bl_agregar_inicio(Blockchain* cadena, size_t id, size_t long_mensaje, char* mensaje);
 
