@@ -21,7 +21,7 @@ typedef struct Merkle {
 	size_t indice_primos;
 	int* primos;
 	size_t cantidad_nodos;
-	size_t capacidad_nodos;;
+	size_t capacidad_nodos;
 	Blockchain** nodos;
 } Merkle;
 
@@ -33,6 +33,6 @@ size_t merkle_alta(Merkle* arbol, Blockchain* nodo);
 void merkle_actualizar(Merkle* arbol, size_t id_blockchain, size_t id_nodo, size_t long_mensaje, char* mensaje);
 void merkle_amendar(Merkle* arbol, size_t id_blockchain, size_t id_nodo, size_t long_mensaje, char* mensaje);
 bool merkle_validar(Merkle* arbol);
-bool merkle_validar_subconjunto(Merkle* arbol, size_t producto_esperado, size_t inicio, size_t fin);
+bool merkle_validar_subconjunto(Merkle* arbol, unsigned long long producto_esperado, size_t inicio, size_t fin);
 
 #endif //MERKLE_H
