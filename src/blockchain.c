@@ -24,7 +24,7 @@ Blockchain* bl_agregar_final(Blockchain* cadena, size_t id, size_t long_mensaje,
 	};
 
 	Blockchain* ultimo = cadena;
-	while (ultimo->siguiente) {
+	while (ultimo && ultimo->siguiente) {
 		ultimo = ultimo->siguiente;
 	};
 

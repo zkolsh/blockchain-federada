@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 
 #include "blockchain.h"
@@ -70,25 +71,31 @@ int main() {
 		printf("Árbol Merkle inválido.\n");
 	};
 
-	Registro pago_manu = registrar_credito(4, "Manuel Slepoy", 48540237, 20000);
-	merkle_amendar(arbol_deudores, pago_manu.tiempo, id_manu, pago_manu.longitud, pago_manu.mensaje);
+	Registro pago_manu1 = registrar_credito(4, "Manuel Slepoy", 48540237, 20000);
+	merkle_amendar(arbol_deudores, pago_manu1.tiempo, id_manu, pago_manu1.longitud, pago_manu1.mensaje);
 
 	unsigned long long producto_esperado;
-	producto_esperado = arbol_deudores->datos[(arbol_deudores->capacidad_datos / 2) + id_felipe]
-	                  * arbol_deudores->datos[(arbol_deudores->capacidad_datos / 2) + id_mate];
+	producto_esperado = arbol_deudores->nodos[(arbol_deudores->capacidad_nodos / 2) + id_felipe]
+	                  * arbol_deudores->nodos[(arbol_deudores->capacidad_nodos / 2) + id_mate];
 	if (merkle_validar_subconjunto(arbol_deudores, producto_esperado, id_felipe, id_mate)) {
 		printf("Subconjunto válido entre Felipe y Mate.\n");
 	} else {
 		printf("Subconjunto inválido.\n");
 	};
 
-	producto_esperado = arbol_deudores->datos[(arbol_deudores->capacidad_datos / 2) + id_mate]
-	                  * arbol_deudores->datos[(arbol_deudores->capacidad_datos / 2) + id_manu];
+	producto_esperado = arbol_deudores->nodos[(arbol_deudores->capacidad_nodos / 2) + id_mate]
+	                  * arbol_deudores->nodos[(arbol_deudores->capacidad_nodos / 2) + id_manu];
 	if (merkle_validar_subconjunto(arbol_deudores, producto_esperado, id_mate, id_manu)) {
 		printf("Subconjunto válido entre Mateo y Manuel.\n");
 	} else {
 		printf("Subconjunto inválido.\n");
 	};
+
+	Registro pago_manu2 = registrar_credito(5, "Manuel Slepoy", 48540237, 15000);
+	merkle_amendar(arbol_deudores, pago_manu2.tiempo, id_manu, pago_manu2.longitud, pago_manu2.mensaje);
+
+	/* Esto debería fallar, porque recien amendamos un nuevo pago, y debería haber cambiado el producto esperado. */
+	assert(merkle_validar_subconjunto(arbol_deudores, producto_esperado, id_mate, id_manu) == false);
 
 	Registro deuda_matias1 = registrar_deuda(10, "Matias Xavier Roveri", 48976714, 250000);
 	Blockchain* bl_matias = bl_agregar_final(NULL, deuda_matias1.tiempo, deuda_matias1.longitud, deuda_matias1.mensaje);
@@ -105,7 +112,7 @@ int main() {
 	bl_benicio = bl_agregar_final(bl_benicio, deuda_benicio2.tiempo, deuda_benicio2.longitud, deuda_benicio2.mensaje);
 	merkle_amendar(arbol_deudores, deuda_benicio2.tiempo, id_benicio, deuda_benicio2.longitud, deuda_benicio2.mensaje);
 
-	Registro deuda_luca = registrar_deuda(14, "Luca Mamani", 48136804, 1060000);
+	Registro deuda_luca = registrar_deuda(14, "Luca Mamani", 48136804, 1110111);
 	Blockchain* bl_luca = bl_agregar_final(NULL, deuda_luca.tiempo, deuda_luca.longitud, deuda_luca.mensaje);
 	size_t id_luca = merkle_alta(arbol_deudores, bl_luca);
 
@@ -167,7 +174,8 @@ int main() {
 	free(pago_delfina_extra.mensaje);
 	free(pago_juan.mensaje);
 	free(pago_luca.mensaje);
-	free(pago_manu.mensaje);
+	free(pago_manu1.mensaje);
+	free(pago_manu2.mensaje);
 	free(pago_matias1.mensaje);
 	free(pago_tomas.mensaje);
 	return 0;
