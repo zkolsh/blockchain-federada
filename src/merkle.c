@@ -209,10 +209,8 @@ unsigned long long merkle_validar_subarbol(Merkle* arbol, size_t id_nodo) {
 	if (id_nodo > arbol->capacidad_datos) return 0;
 	if (id_nodo >= arbol->capacidad_datos / 2) {
 		if (id_nodo >= (arbol->capacidad_datos / 2) + arbol->cantidad_nodos) {
-			printf("oob exit\n");
 			return 1;
 		} else {
-			printf("inbounds exit with %llu\n", arbol->datos[id_nodo]);
 			return arbol->datos[id_nodo];
 		};
 	};
@@ -221,11 +219,9 @@ unsigned long long merkle_validar_subarbol(Merkle* arbol, size_t id_nodo) {
 	unsigned long long der = merkle_validar_subarbol(arbol, id_nodo * 2 + 1);
 	unsigned long long valor_esperado = izq * der;
 	if (valor_esperado != arbol->datos[id_nodo]) {
-		printf("unexpected value between %llu, %llu (expected %llu, got %llu)\n", izq, der, valor_esperado, arbol->datos[id_nodo]);
 		return 0;
 	};
 
-	printf("validated %llu\n", valor_esperado);
 	return valor_esperado;
 };
 
@@ -245,7 +241,6 @@ bool merkle_validar(Merkle* arbol) {
 		};
 	};
 
-	printf("merkle_validar_subarbol\n");
 	return merkle_validar_subarbol(arbol, 1);
 };
 
@@ -267,7 +262,6 @@ bool merkle_validar_subconjunto(Merkle* arbol, unsigned long long producto_esper
 		lista = lista->siguiente;
 		while(lista != NULL){
 			if(lista->id <= lista->anterior->id) {
-				printf("failed to validate blockchain\n");
 				return false;
 			};
 
