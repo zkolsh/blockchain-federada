@@ -91,6 +91,7 @@ int main() {
 		printf("Subconjunto inválido.\n");
 	};
 
+
 	Registro pago_manu2 = registrar_credito(5, "Manuel Slepoy", 48540237, 15000);
 	merkle_amendar(arbol_deudores, pago_manu2.tiempo, id_manu, pago_manu2.longitud, pago_manu2.mensaje);
 
@@ -104,12 +105,11 @@ int main() {
 	Registro pago_matias1 = registrar_credito(11, "Matias Xavier Roveri", 48976714, 50000);
 	merkle_amendar(arbol_deudores, pago_matias1.tiempo, id_matias, pago_matias1.longitud, pago_matias1.mensaje);
 
-	Registro deuda_benicio1 = registrar_deuda(12, "Benicio Sánchez Mandato", 47842266, 98000);
+	Registro deuda_benicio1 = registrar_deuda(12, "Benicio Sánchez Mandato", 47842266, 396000);
 	Blockchain* bl_benicio = bl_agregar_final(NULL, deuda_benicio1.tiempo, deuda_benicio1.longitud, deuda_benicio1.mensaje);
 	size_t id_benicio = merkle_alta(arbol_deudores, bl_benicio);
 
 	Registro deuda_benicio2 = registrar_deuda(13, "Benicio Sánchez Mandato", 47842266, 45000);
-	bl_benicio = bl_agregar_final(bl_benicio, deuda_benicio2.tiempo, deuda_benicio2.longitud, deuda_benicio2.mensaje);
 	merkle_amendar(arbol_deudores, deuda_benicio2.tiempo, id_benicio, deuda_benicio2.longitud, deuda_benicio2.mensaje);
 
 	Registro deuda_luca = registrar_deuda(14, "Luca Mamani", 48136804, 1110111);
@@ -121,14 +121,13 @@ int main() {
 
 	Registro deuda_alejandro = registrar_deuda(16, "Alejandro Schujman", 22296290, 137000);
 	Blockchain* bl_alejandro = bl_agregar_final(NULL, deuda_alejandro.tiempo, deuda_alejandro.longitud, deuda_alejandro.mensaje);
-	size_t id_alejandro = merkle_alta(arbol_deudores, bl_alejandro);
+	merkle_alta(arbol_deudores, bl_alejandro);
 
-	Registro deuda_delfina1 = registrar_deuda(17, "Delfina Martín", 55566777, 32000);
+	Registro deuda_delfina1 = registrar_deuda(17, "Delfina Martin", 55566777, 32000);
 	Blockchain* bl_delfina = bl_agregar_final(NULL, deuda_delfina1.tiempo, deuda_delfina1.longitud, deuda_delfina1.mensaje);
 	size_t id_delfina = merkle_alta(arbol_deudores, bl_delfina);
 
-	Registro deuda_delfina2 = registrar_deuda(18, "Delfina Martín", 55566777, 44000);
-	bl_delfina = bl_agregar_final(bl_delfina, deuda_delfina2.tiempo, deuda_delfina2.longitud, deuda_delfina2.mensaje);
+	Registro deuda_delfina2 = registrar_deuda(18, "Delfina Martin", 55566777, 44000);
 	merkle_amendar(arbol_deudores, deuda_delfina2.tiempo, id_delfina, deuda_delfina2.longitud, deuda_delfina2.mensaje);
 
 	Registro deuda_juan = registrar_deuda(19, "Juan Manuel Rabasedas", 66677888, 5000000);
@@ -148,7 +147,7 @@ int main() {
 	Registro pago_benicio_extra = registrar_credito(23, "Benicio Sánchez Mandato", 47842266, 20000);
 	merkle_amendar(arbol_deudores, pago_benicio_extra.tiempo, id_benicio, pago_benicio_extra.longitud, pago_benicio_extra.mensaje);
 
-	Registro pago_delfina_extra = registrar_credito(24, "Delfina Martín", 55566777, 12000);
+	Registro pago_delfina_extra = registrar_credito(24, "Delfina Martin", 55566777, 12000);
 	merkle_amendar(arbol_deudores, pago_delfina_extra.tiempo, id_delfina, pago_delfina_extra.longitud, pago_delfina_extra.mensaje);
 
 	if (merkle_validar(arbol_deudores)) {

@@ -44,39 +44,46 @@ void merkle_realloc_nodos(Merkle* arbol, size_t nueva_capacidad) {
 	if (!arbol) return;
 	if (nueva_capacidad <= arbol->capacidad_nodos) return;
 
-	unsigned long long* nuevos_datos = realloc(arbol->nodos, sizeof(unsigned long long) * nueva_capacidad);
-	if (!nuevos_datos) {
-		perror("no se pudo hacer realloc\n");
+	unsigned long long* nuevos_nodos = malloc(sizeof(unsigned long long) * nueva_capacidad);
+	if (!nuevos_nodos) {
 		exit(1);
 	};
 
-	arbol->nodos = nuevos_datos;
 	size_t viejo_inicio = arbol->capacidad_nodos / 2;
 	size_t nuevo_inicio = nueva_capacidad / 2;
 	size_t hojas_usadas = arbol->cantidad_bloques;
 
 	if (hojas_usadas == 0) {
+		free(arbol->nodos);
+		arbol->nodos = nuevos_nodos;
 		arbol->capacidad_nodos = nueva_capacidad;
+
+		for (size_t i = 0; i < nueva_capacidad; i++) {
+			arbol->nodos[i] = 1ull;
+		};
+
 		return;
 	};
 
-	size_t ultima_hoja = nuevo_inicio + hojas_usadas + 1;
-	memmove(&nuevos_datos[nuevo_inicio], &arbol->nodos[viejo_inicio],
+	size_t ultima_hoja = nuevo_inicio + hojas_usadas - 1;
+	memmove(&nuevos_nodos[nuevo_inicio], &arbol->nodos[viejo_inicio],
 		hojas_usadas * sizeof(unsigned long long));
 
 	for (size_t i = nuevo_inicio + hojas_usadas; i < nueva_capacidad; i++) {
-		nuevos_datos[i] = 1ull;
+		nuevos_nodos[i] = 1ull;
 	};
 
 	for (size_t i = (nueva_capacidad / 2) - 1; i > 0; i--) {
 		size_t idx_izq = i * 2;
 		size_t idx_der = i * 2 + 1;
 
-		unsigned long long izq = (idx_izq >= ultima_hoja)? 1 : arbol->nodos[idx_izq];
-		unsigned long long der = (idx_der >= ultima_hoja)? 1 : arbol->nodos[idx_der];
-		arbol->nodos[i] = izq * der;
+		unsigned long long izq = (idx_izq > ultima_hoja)? 1 : nuevos_nodos[idx_izq];
+		unsigned long long der = (idx_der > ultima_hoja)? 1 : nuevos_nodos[idx_der];
+		nuevos_nodos[i] = izq * der;
 	};
 
+	free(arbol->nodos);
+	arbol->nodos = nuevos_nodos;
 	arbol->capacidad_nodos = nueva_capacidad;
 };
 
@@ -84,17 +91,17 @@ void merkle_realloc_bloques(Merkle* arbol, size_t nueva_capacidad) {
 	if (!arbol) return;
 	if (nueva_capacidad <= arbol->capacidad_bloques) return;
 
-	Blockchain** nuevos_nodos = (Blockchain**)realloc((void*)arbol->bloques, sizeof(Blockchain*) * nueva_capacidad);
-	if (!nuevos_nodos) {
+	Blockchain** nuevos_bloques = (Blockchain**)realloc((void*)arbol->bloques, sizeof(Blockchain*) * nueva_capacidad);
+	if (!nuevos_bloques) {
 		perror("no se pudo hacer realloc\n");
 		exit(1);
 	};
 
 	for (size_t i = arbol->capacidad_bloques; i < nueva_capacidad; i++) {
-		nuevos_nodos[i] = NULL;
+		nuevos_bloques[i] = NULL;
 	};
 
-	arbol->bloques = nuevos_nodos;
+	arbol->bloques = nuevos_bloques;
 	arbol->capacidad_bloques = nueva_capacidad;
 };
 
@@ -136,6 +143,11 @@ size_t merkle_alta(Merkle* arbol, Blockchain *nodo) {
 };
 
 void merkle_actualizar(Merkle* arbol, size_t id_blockchain, size_t id_nodo, size_t long_mensaje, char* mensaje) {
+	if (id_nodo >= arbol->cantidad_bloques) {
+		printf("no se puede actualizar esta blockchain.\n");
+		return;
+	};
+
 	Blockchain* indice_bl = arbol->bloques[id_nodo];
 	while(id_blockchain != indice_bl->id && indice_bl != NULL) {
 		indice_bl = indice_bl->siguiente;
@@ -172,6 +184,11 @@ void merkle_actualizar(Merkle* arbol, size_t id_blockchain, size_t id_nodo, size
 }
 
 void merkle_amendar(Merkle* arbol, size_t id_blockchain, size_t id_nodo, size_t long_mensaje, char* mensaje) {
+	if (id_nodo >= arbol->cantidad_bloques) {
+		printf("no se puede amendar a esta blockchain.\n");
+		return;
+	};
+
 	arbol->bloques[id_nodo] = bl_agregar_final(arbol->bloques[id_nodo], id_blockchain, long_mensaje, mensaje);
 
 	if (arbol->indice_primos >= arbol->longitud_primos) {
@@ -199,9 +216,10 @@ void merkle_amendar(Merkle* arbol, size_t id_blockchain, size_t id_nodo, size_t 
 unsigned long long merkle_validar_subarbol(Merkle* arbol, size_t id_nodo) {
 	if (!arbol) return 0;
 	if (!id_nodo) return 0;
-	if (id_nodo > arbol->capacidad_nodos) return 0;
+
+	if (id_nodo >= arbol->capacidad_nodos) return 0;
 	if (id_nodo >= arbol->capacidad_nodos / 2) {
-		if (id_nodo >= (arbol->capacidad_nodos / 2) + arbol->cantidad_bloques) {
+		if (id_nodo > (arbol->capacidad_nodos / 2) + arbol->cantidad_bloques - 1) {
 			return 1;
 		} else {
 			return arbol->nodos[id_nodo];
@@ -211,6 +229,7 @@ unsigned long long merkle_validar_subarbol(Merkle* arbol, size_t id_nodo) {
 	unsigned long long izq = merkle_validar_subarbol(arbol, id_nodo * 2);
 	unsigned long long der = merkle_validar_subarbol(arbol, id_nodo * 2 + 1);
 	unsigned long long valor_esperado = izq * der;
+
 	if (valor_esperado != arbol->nodos[id_nodo]) {
 		return 0;
 	};
@@ -220,10 +239,15 @@ unsigned long long merkle_validar_subarbol(Merkle* arbol, size_t id_nodo) {
 
 bool merkle_validar(Merkle* arbol) {
 	if (!arbol) return false;
+
 	for(size_t i=0; i<arbol->cantidad_bloques; i++){
 		Blockchain* lista = arbol->bloques[i];
-		if(lista == NULL) continue;
-		if(lista->siguiente == NULL) continue;
+
+		if(lista == NULL)
+			continue;
+
+		if(lista->siguiente == NULL)
+			continue;
 
 		lista = lista->siguiente;
 		while(lista != NULL) {
