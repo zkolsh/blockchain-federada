@@ -1,0 +1,9 @@
+# Blockchain Federada
+
+## Compilación
+
+```
+make all
+```
+
+Se generarán archivos de objeto en la carpeta `build/`, y el ejecutable `blockchain` en este mismo directorio.
