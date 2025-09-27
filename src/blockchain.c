@@ -15,6 +15,7 @@ void bl_destruir(Blockchain* nodo) {
 	};
 
 	bl_destruir(nodo->siguiente);
+	free(nodo->mensaje);
 	free(nodo);
 };
 

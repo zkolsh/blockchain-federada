@@ -157,25 +157,5 @@ int main() {
 	};
 
 	merkle_destruir(arbol_deudores);
-	free(deuda_alejandro.mensaje);
-	free(deuda_benicio1.mensaje);
-	free(deuda_benicio2.mensaje);
-	free(deuda_delfina1.mensaje);
-	free(deuda_delfina2.mensaje);
-	free(deuda_felipe.mensaje);
-	free(deuda_juan.mensaje);
-	free(deuda_luca.mensaje);
-	free(deuda_manu.mensaje);
-	free(deuda_mate.mensaje);
-	free(deuda_matias1.mensaje);
-	free(deuda_tomas.mensaje);
-	free(pago_benicio_extra.mensaje);
-	free(pago_delfina_extra.mensaje);
-	free(pago_juan.mensaje);
-	free(pago_luca.mensaje);
-	free(pago_manu1.mensaje);
-	free(pago_manu2.mensaje);
-	free(pago_matias1.mensaje);
-	free(pago_tomas.mensaje);
 	return 0;
 };
